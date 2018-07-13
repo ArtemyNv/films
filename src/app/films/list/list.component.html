@@ -1,0 +1,57 @@
+<div class="container">
+  <h1>List of films</h1>
+  <mat-card class="list-card">
+    <div class="search-section">
+      <mat-form-field class="search-field">
+        <input type="text" matInput [matAutocomplete]="auto" [formControl]="titleControl" placeholder="Search film">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelect($event)">
+          <mat-option *ngFor="let option of searchResults | async" [value]="option">{{option.Title}}</mat-option>
+        </mat-autocomplete>
+        <mat-hint align="start" *ngIf="!selectedFilm">Select film from list</mat-hint>
+      </mat-form-field>
+
+      <div *ngIf="selectedFilm" class="film-info">
+        <div class="film-info__image">
+          <img src="{{selectedFilm.Poster}}" alt="" *ngIf="selectedFilm.Poster !== 'N/A'">
+          <img src="assets/poster_none.png" alt="" *ngIf="selectedFilm.Poster === 'N/A'">
+        </div>
+        <div class="film-info__details">
+          <div class="film-info__text">
+            <h4>{{ selectedFilm.Title }}</h4>
+            <div>Type: {{ selectedFilm.Type }}</div>
+            <div>Year: {{ selectedFilm.Year }}</div>
+            <div>
+              <a href="https://imdb.com/title/{{selectedFilm.imdbID}}" target="_blank">IMDb link</a>
+            </div>
+          </div>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="addFilm(selectedFilm)"
+            [disabled]="checkInList(selectedFilm.imdbID)">
+            Add to list
+          </button>
+        </div>
+      </div>
+      <div *ngIf="errorMessage" class="error-message">
+        {{errorMessage}}
+      </div>
+    </div>
+    <div class="list-section">
+      <h3 class="list-section__header">Your list</h3>
+      <mat-list *ngIf="films.length > 0">
+        <mat-list-item *ngFor="let item of films; index as i; trackBy: trackById">
+          <div class="list-item-content">
+            <h4 class="list-item-content__title">
+              <a routerLink="/detail/{{item.imdbID}}" class="list-link">{{ item.Title }}</a>
+            </h4>
+            <mat-icon mat-list-icon color="warn" class="list-item-content__remove" (click)="removeFilm(i, item)">remove_circle_outline</mat-icon>
+          </div>
+        </mat-list-item>
+      </mat-list>
+      <div class="empty-list" *ngIf="films.length == 0">
+        Your list is empty :(
+      </div>
+    </div>
+  </mat-card>
+</div>

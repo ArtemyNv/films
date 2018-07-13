@@ -1,0 +1,25 @@
+<div class="container">
+  <h1>Film details</h1>
+  <mat-card class="details-card">
+    <div *ngIf="film" class="film">
+      <div class="film__image">
+        <img src="{{film.Poster}}" alt="" *ngIf="film.Poster !== 'N/A'">
+        <img src="assets/poster_none.png" alt="" *ngIf="film.Poster === 'N/A'">
+      </div>
+      <div class="film-info">
+        <h3>{{ film.Title }}</h3>
+        <div>Type: {{ film.Type }}</div>
+        <div>Year: {{ film.Year }}</div>
+        <div>
+          <a href="https://imdb.com/title/{{film.imdbID}}" target="_blank">IMDb link</a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!film" class="not-found-block">
+      Film not found :(
+    </div>
+  </mat-card>
+  <div class='text-center'>
+    <a mat-raised-button color="primary" routerLink="/">Back to list</a>
+  </div>
+</div>
